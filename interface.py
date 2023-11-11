@@ -33,7 +33,7 @@ def main(stdscr):
 
         menu_title = "============== Menu =============="
         stdscr.addstr(6, (width - len(menu_title)) // 2, menu_title)
-        stdscr.addstr(7, (width - len("| 0. Settings                     |")) // 2, "| 0. Settings                    |")
+        stdscr.addstr(7, (width - len("| 0. Settings                      |")) // 2, "| 0. Settings                     |")
         stdscr.addstr(8, (width - len("| 1. Go Live                     |")) // 2, "| 1. Go Live                     |")
         stdscr.addstr(9, (width - len("| 2. Status Report               |")) // 2, "| 2. Status Report               |")
         stdscr.addstr(10, (width - len("| 3. Performance Report          |")) // 2, "| 3. Performance Report          |")
