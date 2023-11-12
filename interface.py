@@ -4,7 +4,10 @@ import curses, textwrap
 import configparser
 import os
 import importlib.util
+
 from shared_resources import ib, add_log, log_buffer, log_lock, start_event
+from helper_functions import initialize_strategy_in_supabase, delete_strategy_from_supabase
+
 from strategies.strategy1 import strategy1
 from strategies.strategy2 import strategy2
 
@@ -33,13 +36,12 @@ def main(stdscr):
 
         menu_title = "============== Menu =============="
         stdscr.addstr(6, (width - len(menu_title)) // 2, menu_title)
-        stdscr.addstr(7, (width - len("| 0. Settings                      |")) // 2, "| 0. Settings                     |")
+        stdscr.addstr(7, (width - len("| 0. Settings                     |")) // 2, "| 0. Settings                    |")
         stdscr.addstr(8, (width - len("| 1. Go Live                     |")) // 2, "| 1. Go Live                     |")
         stdscr.addstr(9, (width - len("| 2. Status Report               |")) // 2, "| 2. Status Report               |")
         stdscr.addstr(10, (width - len("| 3. Performance Report          |")) // 2, "| 3. Performance Report          |")
         stdscr.addstr(11, (width - len("| q. Quit                        |")) // 2, "| q. Quit                        |")
         stdscr.addstr(12, (width - len("==================================")) // 2, "==================================")
-
 
         if start_event.is_set():
             stdscr.addstr(15, 0, f"Recent Logs:".ljust(width))
@@ -252,6 +254,9 @@ def add_strategy(stdscr, config, settings_file):
         # Write changes back to settings.ini
         with open(settings_file, 'w') as configfile:
             config.write(configfile)
+        
+        # Call initialize_strategy_in_supabase from helper_functions.py to create supabase entry in strategies table
+        res = initialize_strategy_in_supabase(strategy_id=strategy_count + 1)
 
         # Success message
         success_msg = f"{strategy_name} strategy added successfully! Press any key to continue..."
@@ -408,6 +413,9 @@ def delete_strategy(stdscr, config, settings_file, strategy_section):
 
         with open(settings_file, 'w') as configfile:
             config.write(configfile)
+
+        # Call delete_strategy_from_supabase from helper_functions.py to delete supabase entry in strategies table
+        delete_strategy_from_supabase(strategy_count)
 
         stdscr.addstr(22, 2, "Strategy deleted successfully.")
         stdscr.refresh()

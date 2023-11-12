@@ -2,6 +2,7 @@ from collections import deque
 import threading, time, os, configparser
 from ib_insync import *
 
+util.startLoop()
 
 log_buffer = deque(maxlen=5)
 log_lock = threading.Lock()
